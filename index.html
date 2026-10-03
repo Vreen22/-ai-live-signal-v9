@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050806">
+<title>AI LIVE SIGNAL V9</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#050806;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:520px;margin:auto;padding:16px 16px 32px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px}small{color:#62e49a;letter-spacing:1.5px}
+h1{font-size:24px;margin:5px 0 15px}.mode{border:1px solid #31553e;border-radius:20px;padding:7px 10px;font-size:10px;color:#80e7a4;white-space:nowrap}
+.card,.signal{background:#0b120e;border:1px solid #1c2b21;border-radius:17px;padding:14px;margin:11px 0}
+select,button{width:100%;padding:14px;border-radius:11px;background:#111a15;color:#fff;border:1px solid #304737;font-weight:700}
+button{background:#d9ffe6;color:#06100a;border:0;margin-top:10px}button.secondary{background:#17231b;color:#9df0ba;border:1px solid #31553e}
+.price{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.price b{font-size:29px}
+.live{font-size:10px}.on{color:#5ee596}.off{color:#ffcf66}.err{color:#ff7777}
+.status{text-align:center;padding:10px;border-radius:10px;background:#101812;color:#ffcf66;font-size:11px;margin-bottom:10px}
+.connected{color:#5ee596}.error{color:#ff7777}
+.chart{height:250px;padding:5px}.chart canvas{width:100%;height:100%;display:block}
+.signal{text-align:center}.row{display:flex;justify-content:space-between;color:#89968e}
+#signal{font-size:42px;font-weight:900;padding:13px}.buy{color:#55e491}.sell{color:#ff5f5f}.wait{color:#b9c2bd}
+.grid,.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid div,.metrics div{background:#101812;padding:11px;border-radius:10px;color:#7f8b84;font-size:11px}
+.grid b,.metrics b{display:block;color:white;font-size:16px;margin-top:4px}.metrics{padding:1px;gap:1px}.metrics div{border-radius:0}
+.title{font-size:11px;color:#7f8b84;margin-bottom:8px;letter-spacing:1px}
+.confirm{display:grid;grid-template-columns:1fr 1fr;gap:6px}.confirm div{padding:8px;border-radius:8px;background:#101812;font-size:10px;color:#9aa69f}.confirm b{float:right;color:#fff}
+.notice{padding:11px;border-radius:10px;background:#1a211b;color:#ffd66b;font-size:11px;line-height:1.5;margin-top:10px}
+.auto{text-align:center;padding:13px;background:#101812;border-radius:11px;margin:12px 0}.auto b{color:#65e69b}
+.note{text-align:center;color:#68756d;font-size:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><small>AI LIVE SIGNAL ENGINE</small><h1>🤖 AI LIVE SIGNAL V9</h1></div><div class="mode">SIGNAL ONLY</div></header>
+
+<div class="card">
+<select id="asset">
+<option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option>
+<option value="BNBUSDT">BNB / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="XRPUSDT">XRP / USDT</option>
+</select>
+<div class="price"><b id="price">--</b><span id="engine" class="live off">● CONNECTING</span></div>
+</div>
+
+<div class="card">
+<div id="status" class="status">STARTING LIVE CONNECTION…</div>
+<div id="notice" class="notice" style="display:none"></div>
+<div class="chart"><canvas id="chart"></canvas></div>
+<button class="secondary" id="reconnect">🔄 RECONNECT LIVE DATA</button>
+</div>
+
+<div class="card">
+<div class="title">ANALYSIS TIMEFRAME</div>
+<select id="tf"><option value="1m">1 MIN CLOSED CANDLES</option><option value="5m">5 MIN CLOSED CANDLES</option><option value="15m">15 MIN CLOSED CANDLES</option><option value="30m">30 MIN CLOSED CANDLES</option><option value="1h">1 HOUR CLOSED CANDLES</option></select>
+</div>
+
+<div class="signal">
+<div class="row"><span>AI SIGNAL</span><b id="confidence">--%</b></div>
+<div id="signal" class="wait">WAIT</div>
+<div class="grid">
+<div>Duration<b id="duration">30 SEC</b></div><div>Countdown<b id="countdown">--</b></div>
+<div>Entry<b id="entry">--</b></div><div>Risk / Reward<b id="rr">--</b></div>
+<div>Stop Loss<b id="sl">--</b></div><div>TP1 / TP2<b id="tp">--</b></div>
+</div>
+</div>
+
+<div class="card metrics">
+<div>EMA 50 / 200<b id="ema">--</b></div><div>RSI 14<b id="rsi">--</b></div>
+<div>Momentum<b id="momentum">--</b></div><div>Price Action<b id="action">--</b></div>
+<div>ATR 14<b id="atr">--</b></div><div>Market Structure<b id="structure">--</b></div>
+</div>
+
+<div class="card">
+<div class="title">AI CONFIRMATIONS</div>
+<div class="confirm">
+<div>EMA TREND <b id="cEma">—</b></div><div>RSI <b id="cRsi">—</b></div>
+<div>MOMENTUM <b id="cMom">—</b></div><div>PRICE ACTION <b id="cPa">—</b></div>
+<div>LIQUIDITY <b id="cLiq">—</b></div><div>BOS / CHoCH <b id="cBos">—</b></div>
+<div>FVG <b id="cFvg">—</b></div><div>ATR <b id="cAtr">—</b></div>
+</div>
+<button id="scan">🔎 ANALYZE NOW</button>
+</div>
+
+<div class="auto">AUTO TRADE: <b>OFF</b></div>
+<p class="note">Real Binance public market data only. No fake candles. Signals are generated only from completed candles. This page never places trades.</p>
+</div>
+
+<script>
+let candles=[],ws=null,timer=null,currentSymbol="BTCUSDT",currentTF="1m";
+const $=id=>document.getElementById(id);
+function status(t,k=""){ $("status").textContent=t;$("status").className="status "+k }
+function notice(t){$("notice").style.display=t?"block":"none";$("notice").textContent=t}
+function fmt(v){return Number.isFinite(v)?v.toLocaleString(undefined,{maximumFractionDigits:v>=100?2:6}):"--"}
+function EMA(a,n){if(a.length<n)return null;let e=a.slice(0,n).reduce((x,y)=>x+y,0)/n,k=2/(n+1);for(let i=n;i<a.length;i++)e=a[i]*k+e*(1-k);return e}
+function RSI(a,n=14){if(a.length<n+1)return null;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];d>0?g+=d:l-=d}return l?100-100/(1+g/l):100}
+function ATR(d,n=14){if(d.length<n+1)return null;let x=[];for(let i=1;i<d.length;i++){let c=d[i],p=d[i-1];x.push(Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close)))}return x.slice(-n).reduce((a,b)=>a+b,0)/n}
+
+function reset(){
+$("signal").textContent="WAIT";$("signal").className="wait";$("confidence").textContent="--%";
+["entry","sl","tp","rr","ema","rsi","momentum","action","atr","structure","countdown"].forEach(x=>$(x).textContent="--");
+["cEma","cRsi","cMom","cPa","cLiq","cBos","cFvg","cAtr"].forEach(x=>$(x).textContent="—");
+}
+
+function analyze(){
+if(candles.length<210){reset();status("WAITING FOR CLOSED CANDLES: "+candles.length+"/210");return}
+let d=candles.slice(-210),a=d.map(x=>x.close),e50=EMA(a,50),e200=EMA(a,200),r=RSI(a),at=ATR(d),last=d.at(-1),prev=d.at(-2),p=last.close;
+let buy=0,sell=0,f={ema:"NO",rsi:"NO",mom:"NO",pa:"NO",liq:"NO",bos:"NO",fvg:"NO",atr:"YES"};
+if(e50>e200){buy+=20;f.ema="BUY"}else{sell+=20;f.ema="SELL"}
+if(r>=52&&r<=70){buy+=15;f.rsi="BUY"}else if(r<=48&&r>=30){sell+=15;f.rsi="SELL"}
+let mom=p-a.at(-6);if(mom>0){buy+=15;f.mom="BUY"}else if(mom<0){sell+=15;f.mom="SELL"}
+if(last.close>last.open&&last.close>prev.close){buy+=15;f.pa="BUY"}else if(last.close<last.open&&last.close<prev.close){sell+=15;f.pa="SELL"}
+if(last.low<prev.low&&last.close>prev.low){buy+=10;f.liq="BUY"}if(last.high>prev.high&&last.close<prev.high){sell+=10;f.liq="SELL"}
+let p5=d.slice(-6,-1),hi=Math.max(...p5.map(x=>x.high)),lo=Math.min(...p5.map(x=>x.low));
+if(p>hi){buy+=10;f.bos="BUY"}if(p<lo){sell+=10;f.bos="SELL"}
+let aa=d.at(-3),cc=d.at(-1);if(cc.low>aa.high){buy+=5;f.fvg="BUY"}if(cc.high<aa.low){sell+=5;f.fvg="SELL"}
+let sig="WAIT",cl="wait",conf=0;if(buy>=70&&buy>sell+10){sig="BUY";cl="buy";conf=Math.min(94,buy)}else if(sell>=70&&sell>buy+10){sig="SELL";cl="sell";conf=Math.min(94,sell)}
+$("signal").textContent=sig;$("signal").className=cl;$("confidence").textContent=sig==="WAIT"?"--%":conf+"%";
+$("price").textContent=fmt(p);$("ema").textContent=e50>e200?"BULLISH":"BEARISH";$("rsi").textContent=r.toFixed(1);$("momentum").textContent=mom>0?"UP":"DOWN";$("action").textContent=last.close>last.open?"BULLISH CANDLE":"BEARISH CANDLE";$("atr").textContent=fmt(at);$("structure").textContent=p>hi?"BOS UP":p<lo?"BOS DOWN":"RANGE";
+Object.entries(f).forEach(([k,v])=>$(k==="ema"?"cEma":k==="rsi"?"cRsi":k==="mom"?"cMom":k==="pa"?"cPa":k==="liq"?"cLiq":k==="bos"?"cBos":k==="fvg"?"cFvg":"cAtr").textContent=v);
+if(sig!=="WAIT"){let risk=at*1.15,sl=sig==="BUY"?p-risk:p+risk,tp1=sig==="BUY"?p+risk*1.5:p-risk*1.5,tp2=sig==="BUY"?p+risk*2.4:p-risk*2.4;$("entry").textContent=fmt(p);$("sl").textContent=fmt(sl);$("tp").textContent=fmt(tp1)+" / "+fmt(tp2);$("rr").textContent="1:1.5 / 1:2.4"}else{$("entry").textContent=fmt(p)}
+status("🟢 LIVE • "+currentSymbol+" • "+currentTF+" • CLOSED CANDLES","connected");draw()
+}
+
+function draw(){let c=$("chart"),r=c.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);c.width=Math.max(300,r.width*dpr);c.height=Math.max(180,r.height*dpr);let x=c.getContext("2d"),w=c.width,h=c.height,d=candles.slice(-70);x.clearRect(0,0,w,h);if(d.length<2)return;let min=Math.min(...d.map(z=>z.low)),max=Math.max(...d.map(z=>z.high)),range=max-min||1,s=(w-16)/(d.length-1);d.forEach((z,i)=>{let X=8+i*s,Yh=h-8-(z.high-min)/range*(h-16),Yl=h-8-(z.low-min)/range*(h-16),Yo=h-8-(z.open-min)/range*(h-16),Yc=h-8-(z.close-min)/range*(h-16);x.strokeStyle=z.close>=z.open?"#55e491":"#ff5f5f";x.lineWidth=1*dpr;x.beginPath();x.moveTo(X,Yh);x.lineTo(X,Yl);x.stroke();x.lineWidth=3*dpr;x.beginPath();x.moveTo(X,Yo);x.lineTo(X,Yc);x.stroke()})}
+
+async function history(){
+if(location.protocol==="file:"){notice("⚠️ دا فایل د iPhone Files Preview کې خلاص شوی. Files Preview اکثره Live Internet/WebSocket بندوي. د Live AI Signal لپاره فایل باید په Safari کې د HTTPS ویب پاڼې له لارې خلاص شي.");$("engine").textContent="● OPEN IN SAFARI";$("engine").className="live off";status("FILES PREVIEW — LIVE DATA BLOCKED","error");return}
+notice("");reset();status("LOADING CLOSED CANDLES…");
+try{let u=`https://api.binance.com/api/v3/klines?symbol=${currentSymbol}&interval=${currentTF}&limit=210`,res=await fetch(u,{cache:"no-store"});if(!res.ok)throw Error("HTTP "+res.status);let rows=await res.json();candles=rows.slice(0,-1).map(k=>({time:+k[0],open:+k[1],high:+k[2],low:+k[3],close:+k[4],closed:true}));$("engine").textContent="● LIVE DATA";$("engine").className="live on";analyze();connect()}catch(e){$("engine").textContent="● ERROR";$("engine").className="live err";status("🔴 Binance connection error: "+e.message,"error")}}
+
+function connect(){if(ws)try{ws.close()}catch(e){}ws=new WebSocket("wss://stream.binance.com:9443/ws/"+currentSymbol.toLowerCase()+"@kline_"+currentTF);ws.onopen=()=>status("🟢 BINANCE LIVE CONNECTED","connected");ws.onmessage=e=>{let k=JSON.parse(e.data).k;if(!k.x)return;let z={time:+k.t,open:+k.o,high:+k.h,low:+k.l,close:+k.c,closed:true},last=candles.at(-1);if(last&&last.time===z.time)candles[candles.length-1]=z;else candles.push(z);candles=candles.slice(-300);analyze()};ws.onerror=()=>status("🔴 LIVE WEBSOCKET ERROR","error");ws.onclose=()=>setTimeout(()=>{if(location.protocol!=="file:")connect()},3000)}
+$("asset").onchange=()=>{currentSymbol=$("asset").value;history()};$("tf").onchange=()=>{currentTF=$("tf").value;history()};$("reconnect").onclick=history;$("scan").onclick=analyze;addEventListener("resize",draw);history();
+</script>
+</body>
+</html>
